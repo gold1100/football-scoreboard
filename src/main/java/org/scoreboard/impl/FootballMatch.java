@@ -11,13 +11,13 @@ import java.util.UUID;
 public class FootballMatch implements Match {
 
     private final UUID id;
-    private String homeTeamName;
-    private String awayTeamName;
+    private final String homeTeamName;
+    private final String awayTeamName;
     private int homeTeamScore = 0;
     private int awayTeamScore = 0;
     private final Instant startDate;
 
-    FootballMatch(String homeTeamName, String awayTeamName) {
+    public FootballMatch(String homeTeamName, String awayTeamName) {
         this.id = UUID.randomUUID();
         this.homeTeamName = homeTeamName;
         this.awayTeamName = awayTeamName;
@@ -25,7 +25,16 @@ public class FootballMatch implements Match {
     }
 
     @Override
-    public void updateScore(int teamOneScore, int teamTwoScore) {
-        //TODO: add implementation
+    public void updateScore(int homeTeamScore, int awayTeamScore) {
+        validateIsNonNegative(homeTeamScore);
+        validateIsNonNegative(awayTeamScore);
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
+    }
+
+    private void validateIsNonNegative(int score) {
+        if (score < 0) {
+            throw new IllegalArgumentException("Score cannot be less than 0");
+        }
     }
 }
