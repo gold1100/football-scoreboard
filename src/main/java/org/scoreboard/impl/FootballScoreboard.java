@@ -2,6 +2,7 @@ package org.scoreboard.impl;
 
 import lombok.Getter;
 import org.scoreboard.core.Scoreboard;
+import org.scoreboard.exception.MatchNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +35,11 @@ public class FootballScoreboard implements Scoreboard {
 
 
     @Override
-    public Object finishMatch(UUID matchId) {
-        //TODO: add implementation
-        return null;
+    public void finishMatch(UUID matchId) {
+        if (!matches.containsKey(matchId)) {
+            throw new MatchNotFoundException(String.format("Match with id: %s not found", matchId));
+        }
+        matches.remove(matchId);
     }
 
     @Override
