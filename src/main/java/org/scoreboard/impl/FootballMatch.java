@@ -17,11 +17,11 @@ public class FootballMatch implements Match {
     private int awayTeamScore = 0;
     private final Instant startDate;
 
-    public FootballMatch(String homeTeamName, String awayTeamName) {
+    public FootballMatch(String homeTeamName, String awayTeamName, Instant startDate) {
         this.id = UUID.randomUUID();
         this.homeTeamName = homeTeamName;
         this.awayTeamName = awayTeamName;
-        this.startDate = Instant.now();
+        this.startDate = startDate;
     }
 
     @Override
@@ -30,6 +30,11 @@ public class FootballMatch implements Match {
         validateIsNonNegative(awayTeamScore);
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
+    }
+
+    @Override
+    public int getTotalScore() {
+        return homeTeamScore + awayTeamScore;
     }
 
     private void validateIsNonNegative(int score) {

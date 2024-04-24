@@ -4,13 +4,11 @@ import lombok.Getter;
 import org.scoreboard.core.Scoreboard;
 import org.scoreboard.exception.MatchNotFoundException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 
 @Getter
-public class FootballScoreboard implements Scoreboard {
+public class FootballScoreboard implements Scoreboard<FootballMatch> {
 
     private final Map<UUID, FootballMatch> matches;
 
@@ -18,8 +16,8 @@ public class FootballScoreboard implements Scoreboard {
         matches = new HashMap<>();
     }
 
-
-    public FootballMatch startMatch(String homeTeam, String awayTeam) {
+    @Override
+    public FootballMatch startMatch(String homeTeam, String awayTeam, Instant startDate) {
         if (homeTeam == null) {
             throw new IllegalArgumentException("Home team name cannot be null");
         }
@@ -28,9 +26,13 @@ public class FootballScoreboard implements Scoreboard {
         }
         validateMatchDoesNotExist(homeTeam, awayTeam);
 
-        FootballMatch newMatch = new FootballMatch(homeTeam, awayTeam);
+        FootballMatch newMatch = new FootballMatch(homeTeam, awayTeam, startDate);
         matches.put(newMatch.getId(), newMatch);
         return newMatch;
+    }
+
+    public FootballMatch startMatch(String homeTeam, String awayTeam) {
+        return startMatch(homeTeam, awayTeam, Instant.now());
     }
 
 
@@ -43,9 +45,11 @@ public class FootballScoreboard implements Scoreboard {
     }
 
     @Override
-    public Object getSummary() {
-        //TODO: add implementation
-        return null;
+    public List<FootballMatch> getSummary() {
+        return matches.values().stream()
+                .sorted(Comparator.comparing(FootballMatch::getTotalScore)
+                        .thenComparing(FootballMatch::getStartDate).reversed())
+                .toList();
     }
 
     private void validateMatchDoesNotExist(String homeTeam, String awayTeam) {
