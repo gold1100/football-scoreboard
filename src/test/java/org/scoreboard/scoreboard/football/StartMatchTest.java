@@ -13,23 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class StartMatchTest {
     FootballScoreboard scoreboard = new FootballScoreboard();
 
-    public static Stream<Arguments> nullNameArguments() {
-        return Stream.of(
-                Arguments.of(
-                        null,
-                        "away"
-                ),
-                Arguments.of(
-                        "home",
-                        null
-                ),
-                Arguments.of(
-                        null,
-                        null
-                )
-        );
-    }
-
     @Test
     void shouldStartNewMatch() {
         //given
@@ -63,5 +46,22 @@ class StartMatchTest {
     @MethodSource("nullNameArguments")
     void shouldThrowIllegalArgumentExceptionWhenNamesAreNull(String homeTeam, String awayTeam) {
         assertThrows(IllegalArgumentException.class, () -> scoreboard.startMatch(homeTeam, awayTeam));
+    }
+
+    public static Stream<Arguments> nullNameArguments() {
+        return Stream.of(
+                Arguments.of(
+                        null,
+                        "away"
+                ),
+                Arguments.of(
+                        "home",
+                        null
+                ),
+                Arguments.of(
+                        null,
+                        null
+                )
+        );
     }
 }
