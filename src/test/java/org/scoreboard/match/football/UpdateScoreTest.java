@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.scoreboard.impl.FootballMatch;
 
+import java.time.Instant;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +33,7 @@ class UpdateScoreTest {
         //given
         int updatedHomeScore = 3;
         int updatedAwayScore = 2;
-        FootballMatch match = new FootballMatch("home", "away");
+        FootballMatch match = new FootballMatch("home", "away", Instant.now());
 
         //when
         match.updateScore(updatedHomeScore, updatedAwayScore);
@@ -46,7 +47,7 @@ class UpdateScoreTest {
     @MethodSource("negativeScoreArguments")
     void shouldThrowIllegalArgumentExceptionWhenScoreIsNegative(int newHomeScore, int newAwayScore) {
         //given
-        FootballMatch match = new FootballMatch("home", "away");
+        FootballMatch match = new FootballMatch("home", "away", Instant.now());
 
         //then
         assertThrows(IllegalArgumentException.class, () -> match.updateScore(newHomeScore, newAwayScore));
